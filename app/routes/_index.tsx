@@ -1,5 +1,5 @@
 import type { MetaFunction } from '@remix-run/node';
-import { Form, useActionData } from '@remix-run/react';
+import { Form, useActionData, useNavigation } from '@remix-run/react';
 import { scrape } from '~/data/scrape';
 
 export const meta: MetaFunction = () => {
@@ -11,6 +11,9 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const data = useActionData() as string;
+  console.log('Index ~ data:', data);
+  const navigate = useNavigation();
+  console.log('Index ~ navigate:', navigate.state);
 
   return (
     <>
@@ -20,13 +23,14 @@ export default function Index() {
       <section>
         <Form method="POST">
           <button
-            className="px-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 text-xl"
+            className="px-2 border border-gray-300 rounded-md shadow-sm  font-medium text-gray-700 bg-white hover:bg-gray-50 text-xl"
             type="submit"
           >
             Scrape
           </button>
         </Form>
-        {data && <p>data</p>}
+        {navigate.state === 'submitting' && <p>Submitting...</p>}
+        {data && <p>{data}</p>}
       </section>
     </>
   );
@@ -35,6 +39,16 @@ export default function Index() {
 export async function action() {
   console.log('action');
 
-  const result = await scrape();
-  return result;
+  try {
+    const result = await scrape();
+    return result;
+  } catch (error) {
+    console.error(error);
+    return new Response('Internal Server Error', {
+      status: 500,
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    });
+  }
 }
