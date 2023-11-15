@@ -1,5 +1,6 @@
 import type { MetaFunction } from '@remix-run/node';
-import { Form } from '@remix-run/react';
+import { Form, useActionData } from '@remix-run/react';
+import { scrape } from '~/data/scrape';
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,6 +10,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const data = useActionData() as string;
+
   return (
     <>
       <header className="text-center py-20">
@@ -23,6 +26,7 @@ export default function Index() {
             Scrape
           </button>
         </Form>
+        {data && <p>data</p>}
       </section>
     </>
   );
@@ -30,5 +34,7 @@ export default function Index() {
 
 export async function action() {
   console.log('action');
-  return null;
+
+  const result = await scrape();
+  return result;
 }
