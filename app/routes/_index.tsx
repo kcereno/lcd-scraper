@@ -25,7 +25,10 @@ export default function Index() {
     <>
       <div className="py-32">
         <h1 className="font-sans text-3xl font-bold tracking-tight text-center">
-          Local Coverage Determination (LCD) Scraper
+          <span className="text-pink-500">
+            Local Coverage Determination (LCD){' '}
+          </span>{' '}
+          Scraper
         </h1>
 
         <Form
