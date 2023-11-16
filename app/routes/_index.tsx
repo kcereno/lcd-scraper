@@ -1,7 +1,14 @@
 import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Form, useActionData, useNavigation } from '@remix-run/react';
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from '@remix-run/react';
+import { dataTypes } from 'types';
 import CoverageGuidelines from '~/components/CoverageGuidelines';
 import { getLCDs, scrape } from '~/data/scrape';
+import { lcdDataType } from '../../types';
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,15 +18,11 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  type dataTypes = {
-    lcd: string;
-    coverageGuidanceArr: string[];
-  };
-
-  const data = useActionData<dataTypes>();
-  console.log('Index ~ data:', data);
-
   const navigate = useNavigation();
+  const data = useActionData<dataTypes>();
+
+  const lcdArr = useLoaderData<lcdDataType[]>();
+  console.log('Index ~ lcdArr:', lcdArr);
 
   return (
     <>
@@ -30,10 +33,9 @@ export default function Index() {
           </span>{' '}
           Scraper
         </h1>
-
         <Form
           method="POST"
-          className="flex w-1/2 gap-2 mx-auto mt-10"
+          className="flex w-1/2 gap-2 mx-auto my-10"
         >
           <input
             type="text"
@@ -48,12 +50,24 @@ export default function Index() {
             Scrape
           </button>
         </Form>
+        <hr className="max-w-5xl mx-auto mb-10" />
+        {lcdArr! && (
+          <div className="flex flex-wrap justify-center max-w-5xl gap-2 mx-auto">
+            {lcdArr!.map((lcd) => (
+              <div
+                key={lcd.text}
+                className="badge badge-secondary"
+              >
+                {lcd.text}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {navigate.state === 'submitting' && (
         <p className="text-xl text-center text-red-500">Scraping data....</p>
       )}
-
       {data && (
         <div className="max-w-4xl mx-auto shadow-xl card bg-base-300">
           <div className="card-body">
@@ -90,5 +104,5 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export async function loader() {
   const lcds = await getLCDs();
-  return null;
+  return lcds;
 }
