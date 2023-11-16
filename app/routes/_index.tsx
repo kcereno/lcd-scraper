@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useActionData, useNavigation } from '@remix-run/react';
 import type { dataTypes } from 'types';
-import CoverageGuidelines from '~/components/CoverageGuidelinesCollapse';
+
 import { getLCDs, scrape } from '~/data/scrape';
 import LCDDropdown from '../components/LCDDropdown';
 import LoadingSpinner from '~/components/ui/LoadingSpinner';
@@ -19,10 +19,10 @@ export default function Index() {
   const data = useActionData<dataTypes>();
 
   return (
-    <>
-      <div className="pt-20">
+    <main className="py-20">
+      <div className="">
         <h1 className="font-sans text-3xl font-bold tracking-tight text-center">
-          <span className="text-pink-500">
+          <span className="text-primary">
             Local Coverage Determination (LCD){' '}
           </span>{' '}
           Scraper
@@ -33,7 +33,7 @@ export default function Index() {
 
       {navigate.state === 'submitting' && <LoadingSpinner className="my-10" />}
       {data && <DataCard />}
-    </>
+    </main>
   );
 }
 

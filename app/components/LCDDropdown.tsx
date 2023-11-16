@@ -44,7 +44,7 @@ export default function LCDDropdown() {
         ))}
       </select>
       <button
-        className="btn btn-primary"
+        className="btn btn-secondary"
         type="submit"
       >
         Scrape

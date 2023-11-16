@@ -17,17 +17,24 @@ export default function HCPSCCollapse({ hcpscModifiers, hcpscCodes }: Props) {
         {/* Modifiers */}
         <div className="">
           <h3 className="font-bold">Modifiers</h3>
-          <hr className="my-2" />
-          {hcpscModifiers.map((el) => (
-            <p key={el}>{el}</p>
-          ))}
+          <div className="my-0 divider"></div>
+          {hcpscModifiers.length > 0 ? (
+            <div className="">
+              {hcpscModifiers.map((el) => (
+                <p key={el}>{el}</p>
+              ))}
+            </div>
+          ) : (
+            <p>No Modifiers Found</p>
+          )}
         </div>
 
+        {/* Codes */}
         <div className="mt-10">
           <h3 className="font-bold">Codes</h3>
-          <hr className="my-2" />
+          <div className="my-0 divider"></div>
           <div className="overflow-x-auto">
-            <table className="table">
+            <table className="table border">
               <thead>
                 <tr>
                   <th>Code</th>
