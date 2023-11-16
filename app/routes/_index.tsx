@@ -4,7 +4,9 @@ import {
   useActionData,
   useLoaderData,
   useNavigation,
+  useSubmit,
 } from '@remix-run/react';
+import React from 'react';
 import type { dataTypes, lcdDataType } from 'types';
 import CoverageGuidelines from '~/components/CoverageGuidelines';
 import { getLCDs, scrape } from '~/data/scrape';
@@ -17,15 +19,28 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const [selectedLCD, setSelectedLCD] = React.useState('');
+
   const navigate = useNavigation();
   const data = useActionData<dataTypes>();
+  console.log('Index ~ data:', data);
 
   const lcdArr = useLoaderData<lcdDataType[]>();
-  console.log('Index ~ lcdArr:', lcdArr);
+
+  const submit = useSubmit();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submit({ url: selectedLCD }, { method: 'post' });
+  };
+
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLCD(e.target.value);
+  };
 
   return (
     <>
-      <div className="py-20">
+      <div className="pt-20">
         <h1 className="font-sans text-3xl font-bold tracking-tight text-center">
           <span className="text-pink-500">
             Local Coverage Determination (LCD){' '}
@@ -36,14 +51,13 @@ export default function Index() {
         <Form
           method="POST"
           className="flex w-1/2 gap-2 mx-auto my-10"
+          onSubmit={handleSubmit}
         >
-          {/* <input
-            type="text"
-            className="w-full input input-bordered"
+          <select
+            className="w-full select select-bordered"
             name="url"
-            placeholder="Enter URL to scrape"
-          /> */}
-          <select className="w-full select select-bordered">
+            onChange={handleSelect}
+          >
             <option
               disabled
               selected
@@ -86,10 +100,9 @@ export default function Index() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  console.log('action ~ request:', request);
   const formData = await request.formData();
   const url = formData.get('url');
-
-  // if (!url) return 'No URL provided';
 
   try {
     const result = await scrape(url as string);

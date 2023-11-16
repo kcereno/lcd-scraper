@@ -7,12 +7,13 @@ type hcpsData = {
 };
 
 export async function scrape(url: string) {
+  console.log('scrape ~ url:', url);
   const browser = await puppeteer.launch({ headless: 'new' });
   const page = await browser.newPage();
   const test =
     'https://www.cms.gov/medicare-coverage-database/view/lcd.aspx?LCDId=33690&ContrID=140';
 
-  await page.goto(test);
+  await page.goto(url);
 
   await page.setViewport({ width: 1080, height: 1024 });
 
@@ -99,12 +100,10 @@ export async function getLCDs() {
   const tableSelector = 'table.greenbackground';
   const table = await page.$(tableSelector);
 
-  console.log('getLCDs ~ table:', table);
-
   if (table) {
     const data = await table.evaluate((table) => {
       const rows = Array.from(table.querySelectorAll('tr'));
-      console.log('data ~ rows:', rows);
+
       const rowData: lcdDataType[] = [];
 
       rows.slice(1).forEach((row) => {

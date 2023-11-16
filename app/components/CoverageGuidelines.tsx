@@ -5,10 +5,6 @@ type Props = {
 };
 
 export default function CoverageGuidelines({ coverageGuidelineArr }: Props) {
-  console.log(
-    'CoverageGuidelines ~ coverageGuidelineArr:',
-    coverageGuidelineArr
-  );
   return (
     <>
       <h2 className="mt-5 text-2xl">Coverage Guidelines</h2>
