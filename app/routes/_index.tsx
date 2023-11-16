@@ -11,7 +11,12 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  const data = useActionData();
+  type dataTypes = {
+    lcd: string;
+    coverageGuidanceArr: string[];
+  };
+
+  const data = useActionData<dataTypes>();
   console.log('Index ~ data:', data);
 
   const navigate = useNavigation();
@@ -64,7 +69,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const url = formData.get('url');
 
-  if (!url) return 'No URL provided';
+  // if (!url) return 'No URL provided';
 
   try {
     const result = await scrape(url as string);
@@ -79,3 +84,5 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 }
+
+// export async function loader() {}
