@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import { lcdDataType } from 'types';
 
 type hcpsData = {
   code: string;
@@ -87,4 +88,42 @@ export async function scrape(url: string) {
   };
 }
 
-export async function getLCD() {}
+export async function getLCDs() {
+  const browser = await puppeteer.launch({ headless: 'new' });
+  const page = await browser.newPage();
+  const test = 'https://cgsmedicare.com/jc/coverage/lcdinfo.html';
+
+  await page.goto(test);
+  await page.setViewport({ width: 1080, height: 1024 });
+
+  const tableSelector = 'table[class="greenbackground"]';
+  const table = await page.$(tableSelector);
+  console.log('getLCDs ~ table:', table);
+
+  if (table) {
+    const data = await table.evaluate((table) => {
+      const rows = table.querySelectorAll('tr');
+      console.log('data ~ rows:', rows);
+      const rowData: lcdDataType[] = [];
+
+      rows.forEach((row, index) => {
+        if (index > 0) {
+          // Skip the header row if applicable
+          const columns = row.querySelectorAll('td');
+          if (columns.length > 0) {
+            const link = columns[0].querySelector('a');
+            if (link) {
+              rowData.push({
+                text: link.textContent as string,
+                url: link.href,
+              });
+            }
+          }
+        }
+      });
+      return rowData;
+    });
+    await browser.close();
+    return data;
+  }
+}

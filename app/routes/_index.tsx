@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import CoverageGuidelines from '~/components/CoverageGuidelines';
-import { scrape } from '~/data/scrape';
+import { getLCDs, scrape } from '~/data/scrape';
 
 export const meta: MetaFunction = () => {
   return [
@@ -88,4 +88,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 }
 
-// export async function loader() {}
+export async function loader() {
+  const lcds = await getLCDs();
+  return null;
+}
