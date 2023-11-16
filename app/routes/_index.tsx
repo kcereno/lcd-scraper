@@ -10,10 +10,9 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  const data = useActionData() as string;
-  console.log('Index ~ data:', data);
+  const data = useActionData();
+
   const navigate = useNavigation();
-  console.log('Index ~ navigate:', navigate.state);
 
   return (
     <>
@@ -29,8 +28,15 @@ export default function Index() {
             Scrape
           </button>
         </Form>
+        {data! && (
+          <div className="">
+            <h1 className="text-xl">{data.lcd}</h1>
+            {data.coverageGuidance.map((el) => (
+              <p key={el}>{el}</p>
+            ))}
+          </div>
+        )}
         {navigate.state === 'submitting' && <p>Submitting...</p>}
-        {data && <p>{data}</p>}
       </section>
     </>
   );
