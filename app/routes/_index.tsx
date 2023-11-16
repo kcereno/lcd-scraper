@@ -16,28 +16,41 @@ export default function Index() {
 
   return (
     <>
-      <header className="text-center py-20">
-        <h1 className="text-7xl">Local Coverage Determinations Scraper</h1>
-      </header>
-      <section>
-        <Form method="POST">
+      <div className="py-32">
+        <h1 className="font-sans text-3xl font-bold tracking-tight text-center">
+          Local Coverage Determination (LCD) Scraper
+        </h1>
+
+        <Form
+          method="POST"
+          className="flex w-1/2 gap-2 mx-auto mt-10"
+        >
+          <input
+            type="text"
+            className="w-full input input-bordered"
+            name="url"
+            placeholder="Enter URL to scrape"
+          />
           <button
-            className="px-2 border border-gray-300 rounded-md shadow-sm  font-medium text-gray-700 bg-white hover:bg-gray-50 text-xl"
+            className="btn btn-primary"
             type="submit"
           >
             Scrape
           </button>
         </Form>
-        {data! && (
-          <div className="">
-            <h1 className="text-xl">{data.lcd}</h1>
-            {data.coverageGuidance.map((el) => (
-              <p key={el}>{el}</p>
-            ))}
+      </div>
+
+      {navigate.state === 'submitting' && (
+        <p className="text-xl text-center text-red-500">Scraping data....</p>
+      )}
+
+      {data && (
+        <div className="max-w-4xl mx-auto shadow-xl card bg-base-300">
+          <div className="card-body">
+            <h1 className="text-xl font-bold">{data.lcd}</h1>
           </div>
-        )}
-        {navigate.state === 'submitting' && <p>Submitting...</p>}
-      </section>
+        </div>
+      )}
     </>
   );
 }

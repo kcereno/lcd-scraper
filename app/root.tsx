@@ -16,7 +16,10 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      data-theme="dark"
+    >
       <head>
         <meta charSet="utf-8" />
         <meta
@@ -26,8 +29,8 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="bg-slate-800 text-white">
-        <main className="max-w-7xl mx-auto bg-red">
+      <body className="">
+        <main className="mx-auto max-w-7xl bg-red">
           <Outlet />
         </main>
         <ScrollRestoration />
