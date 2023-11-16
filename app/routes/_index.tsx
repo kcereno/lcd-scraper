@@ -5,10 +5,9 @@ import {
   useLoaderData,
   useNavigation,
 } from '@remix-run/react';
-import { dataTypes } from 'types';
+import type { dataTypes, lcdDataType } from 'types';
 import CoverageGuidelines from '~/components/CoverageGuidelines';
 import { getLCDs, scrape } from '~/data/scrape';
-import { lcdDataType } from '../../types';
 
 export const meta: MetaFunction = () => {
   return [
@@ -26,23 +25,40 @@ export default function Index() {
 
   return (
     <>
-      <div className="py-32">
+      <div className="py-20">
         <h1 className="font-sans text-3xl font-bold tracking-tight text-center">
           <span className="text-pink-500">
             Local Coverage Determination (LCD){' '}
           </span>{' '}
           Scraper
         </h1>
+
         <Form
           method="POST"
           className="flex w-1/2 gap-2 mx-auto my-10"
         >
-          <input
+          {/* <input
             type="text"
             className="w-full input input-bordered"
             name="url"
             placeholder="Enter URL to scrape"
-          />
+          /> */}
+          <select className="w-full select select-bordered">
+            <option
+              disabled
+              selected
+            >
+              Select LCD
+            </option>
+            {lcdArr!.map((lcd) => (
+              <option
+                key={lcd.text}
+                value={lcd.url}
+              >
+                {lcd.text}
+              </option>
+            ))}
+          </select>
           <button
             className="btn btn-primary"
             type="submit"
@@ -50,19 +66,6 @@ export default function Index() {
             Scrape
           </button>
         </Form>
-        <hr className="max-w-5xl mx-auto mb-10" />
-        {lcdArr! && (
-          <div className="flex flex-wrap justify-center max-w-5xl gap-2 mx-auto">
-            {lcdArr!.map((lcd) => (
-              <div
-                key={lcd.text}
-                className="badge badge-secondary"
-              >
-                {lcd.text}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
       {navigate.state === 'submitting' && (
