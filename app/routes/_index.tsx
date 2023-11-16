@@ -1,5 +1,6 @@
-import type { MetaFunction } from '@remix-run/node';
+import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
+import CoverageGuidelines from '~/components/CoverageGuidelines';
 import { scrape } from '~/data/scrape';
 
 export const meta: MetaFunction = () => {
@@ -11,6 +12,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const data = useActionData();
+  console.log('Index ~ data:', data);
 
   const navigate = useNavigation();
 
@@ -47,7 +49,10 @@ export default function Index() {
       {data && (
         <div className="max-w-4xl mx-auto shadow-xl card bg-base-300">
           <div className="card-body">
-            <h1 className="text-xl font-bold">{data.lcd}</h1>
+            <h1 className="text-3xl card-title">{data.lcd}</h1>
+            <CoverageGuidelines
+              coverageGuidelineArr={data.coverageGuidanceArr as string[]}
+            />
           </div>
         </div>
       )}
@@ -55,11 +60,14 @@ export default function Index() {
   );
 }
 
-export async function action() {
-  console.log('action');
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const url = formData.get('url');
+
+  if (!url) return 'No URL provided';
 
   try {
-    const result = await scrape();
+    const result = await scrape(url as string);
     return result;
   } catch (error) {
     console.error(error);
