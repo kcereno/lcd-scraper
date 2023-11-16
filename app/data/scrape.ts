@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { lcdDataType } from 'types';
+import type { lcdDataType } from 'types';
 
 type hcpsData = {
   code: string;
@@ -10,8 +10,6 @@ export async function scrape(url: string) {
   console.log('scrape ~ url:', url);
   const browser = await puppeteer.launch({ headless: 'new' });
   const page = await browser.newPage();
-  const test =
-    'https://www.cms.gov/medicare-coverage-database/view/lcd.aspx?LCDId=33690&ContrID=140';
 
   await page.goto(url);
 
