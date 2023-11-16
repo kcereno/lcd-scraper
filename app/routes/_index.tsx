@@ -1,10 +1,11 @@
 import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useActionData, useNavigation } from '@remix-run/react';
 import type { dataTypes } from 'types';
-import CoverageGuidelines from '~/components/CoverageGuidelines';
+import CoverageGuidelines from '~/components/CoverageGuidelinesCollapse';
 import { getLCDs, scrape } from '~/data/scrape';
 import LCDDropdown from '../components/LCDDropdown';
 import LoadingSpinner from '~/components/ui/LoadingSpinner';
+import DataCard from '~/components/DataCard';
 
 export const meta: MetaFunction = () => {
   return [
@@ -31,16 +32,7 @@ export default function Index() {
       </div>
 
       {navigate.state === 'submitting' && <LoadingSpinner className="my-10" />}
-      {data && (
-        <div className="max-w-4xl mx-auto shadow-xl card bg-base-300">
-          <div className="card-body">
-            <h1 className="text-3xl card-title">{data.lcd}</h1>
-            <CoverageGuidelines
-              coverageGuidelineArr={data.coverageGuidanceArr as string[]}
-            />
-          </div>
-        </div>
-      )}
+      {data && <DataCard />}
     </>
   );
 }
@@ -50,8 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const url = formData.get('url');
 
   try {
-    const result = await scrape(url as string);
-    return result;
+    return await scrape(url as string);
   } catch (error) {
     console.error(error);
     return new Response('Internal Server Error', {

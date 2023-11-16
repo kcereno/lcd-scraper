@@ -3,7 +3,14 @@ export type lcdDataType = {
   url: string;
 };
 
+type hcpsData = {
+  code: string;
+  description: string;
+};
+
 export type dataTypes = {
   lcd: string;
-  coverageGuidanceArr: string[];
+  coverageGuidelines: string[];
+  hcpcsModifiers: string[];
+  hcpscCodes: hcpsData[];
 };

@@ -26,7 +26,7 @@ export async function scrape(url: string) {
 
   // Modifiers
   const hcpsModifiersSelector = 'div[id="divHcpcsCodesGroup1Fields"]';
-  const hcpcsModifiersArr = await page.$eval(hcpsModifiersSelector, (div) => {
+  const hcpcsModifiers = await page.$eval(hcpsModifiersSelector, (div) => {
     const childElements = Array.from(div.querySelectorAll('p'));
 
     const extractedData = [];
@@ -35,12 +35,12 @@ export async function scrape(url: string) {
       extractedData.push(childElement.textContent);
     }
 
-    return extractedData;
+    return extractedData.slice(2, -1);
   });
 
   // HSPSC Codes
   const tableSelector = 'table[id="gdvHcpcsCodes1"]';
-  const hcpsData = await page.evaluate((tableSelector) => {
+  const hcpscCodes = await page.evaluate((tableSelector) => {
     const table = document.querySelector(tableSelector);
     const rows = table?.querySelectorAll('tr');
     const data: hcpsData[] = [];
@@ -64,7 +64,7 @@ export async function scrape(url: string) {
 
   // get Coverage Guidance
   const coverageGuidanceSelector = 'span[id="lblCoverageIndication"]';
-  const coverageGuidanceArr = await page.$eval(
+  const coverageGuidelines = await page.$eval(
     coverageGuidanceSelector,
     (span) => {
       const childElements = Array.from(span.querySelectorAll('p'));
@@ -83,9 +83,9 @@ export async function scrape(url: string) {
 
   return {
     lcd,
-    coverageGuidanceArr,
-    hcpcsModifiersArr,
-    hcpsData,
+    coverageGuidelines,
+    hcpcsModifiers,
+    hcpscCodes,
   };
 }
 
