@@ -119,6 +119,5 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function loader() {
-  const lcds = await getLCDs();
-  return lcds;
+  return await getLCDs();
 }
