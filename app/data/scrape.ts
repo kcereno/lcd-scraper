@@ -49,8 +49,8 @@ export async function scrape(url: string) {
       // Ensure there are at least two columns (code and description)
       if (columns.length >= 2) {
         const rowData = {
-          code: columns[0].textContent.trim(),
-          description: columns[1].textContent.trim(),
+          code: columns[0].textContent?.trim() || 'N/A',
+          description: columns[1].textContent?.trim() || 'N/A',
         };
 
         data.push(rowData);
