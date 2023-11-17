@@ -32,7 +32,7 @@ export default function Index() {
       </div>
 
       {navigate.state === 'submitting' && <LoadingSpinner className="my-10" />}
-      {data && <DataCard />}
+      {data && navigate.state !== 'submitting' && <DataCard />}
     </main>
   );
 }
